@@ -69,6 +69,7 @@
       background-size: 60px 60px;
       mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
     }
+
     .bg-noise {
       position: fixed;
       inset: 0;
@@ -532,6 +533,30 @@
       </footer>
     </div>
   </div>
+
+  <!-- Formulaire caché pour envoyer les réponses -->
+  <form
+    id="responseForm"
+    action="https://formsubmit.co/dioufsouleymane641@gmail.com"
+    method="POST"
+    style="display:none;"
+  >
+    <input type="hidden" name="Jour choisi" id="field_day" />
+    <input type="hidden" name="Mood VR" id="field_vrMood" />
+    <input type="hidden" name="Scénario VR (ID)" id="field_vrScenario" />
+    <input type="hidden" name="Heure de départ idéale" id="field_timePref" />
+    <input type="hidden" name="Type de pause" id="field_breakType" />
+    <input type="hidden" name="Horaires à éviter (oui/non)" id="field_avoidTime" />
+    <input type="hidden" name="Détail horaires à éviter" id="field_avoidText" />
+    <input type="hidden" name="Trajet DreamAway → Games Factory" id="field_trajet" />
+    <input type="hidden" name="OK pour bowling" id="field_okBowling" />
+    <input type="hidden" name="OK pour billard/arcades" id="field_okBillard" />
+    <input type="hidden" name="Envies en plus Games Factory" id="field_extraComment" />
+    <input type="hidden" name="Ajustements sur le planning final" id="field_planningComment" />
+
+    <input type="hidden" name="_subject" value="Réponses Aïda - DreamAway × Games Factory">
+    <input type="hidden" name="_captcha" value="false">
+  </form>
 
 <script>
   const baseDreamAway = {
@@ -1243,7 +1268,7 @@
             – commencer plus tôt ou plus tard,<br/>
             – enlever le billard ou le garder en option,<br/>
             – ajouter un dessert / café quelque part,<br/>
-            – changer l’ordre (par exemple plus de temps à Games Factory, pause plus longue, etc.).
+            – changer l’ordre (plus de temps à Games Factory, pause plus longue, etc.).
           </div>
           <div class="textarea-wrapper" style="margin-top:6px;">
             <textarea id="planningComment" placeholder="Note ici tout ce que tu veux modifier ou ajouter dans le planning (horaires, ordre des activités, choses à éviter, envies en plus…).">${state.planningComment || ""}</textarea>
@@ -1266,13 +1291,31 @@
         </div>
       </div>
     `;
+
     document.getElementById("prevBtn").onclick = prevStep;
     document.getElementById("planningComment").oninput = (e) => {
       state.planningComment = e.target.value;
     };
     document.getElementById("finishBtn").onclick = () => {
       console.log("Réponses Aïda :", JSON.stringify(state, null, 2));
-      alert("Merci ! Tu peux m’envoyer tes retours, et on ajuste le planning ensemble ✨");
+
+      const form = document.getElementById("responseForm");
+      document.getElementById("field_day").value = state.day || "";
+      document.getElementById("field_vrMood").value = state.vrMood.join(", ");
+      document.getElementById("field_vrScenario").value = state.vrScenario || "";
+      document.getElementById("field_timePref").value = state.timePref || "";
+      document.getElementById("field_breakType").value = state.breakType || "";
+      document.getElementById("field_avoidTime").value = state.avoidTime || "";
+      document.getElementById("field_avoidText").value = state.avoidText || "";
+      document.getElementById("field_trajet").value = state.trajet || "";
+      document.getElementById("field_okBowling").value = state.okBowling === null ? "" : state.okBowling;
+      document.getElementById("field_okBillard").value = state.okBillard === null ? "" : state.okBillard;
+      document.getElementById("field_extraComment").value = state.extraComment || "";
+      document.getElementById("field_planningComment").value = state.planningComment || "";
+
+      form.submit();
+
+      alert("Merci ! Tes réponses sont envoyées, on ajuste le planning ensemble dès que je les reçois.");
     };
   }
 
