@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Après-midi DreamAway x Games Factory</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- RESET -->
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #02030b;
+      color: #f5f5ff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    a { color: #7bdcff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+
+  <!-- STYLE PRINCIPAL + FOND ANIMÉ -->
+  <style>
+    .bg-orbs {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      z-index: -2;
+      background:
+        radial-gradient(circle at 0% 0%, #060b1a 0, #02030b 45%, #010108 100%);
+    }
+    .orb {
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.28), transparent 55%),
+                  radial-gradient(circle at 80% 80%, rgba(0, 0, 0, 0.7), transparent 60%),
+                  linear-gradient(135deg, rgba(124, 92, 255, 0.95), rgba(0, 209, 255, 0.9));
+      opacity: 0.18;
+      filter: blur(1px);
+      animation: floatOrb 22s linear infinite;
+      mix-blend-mode: screen;
+    }
+    .orb--2 { width: 260px; height: 260px; animation-duration: 28s; animation-delay: -7s; opacity: 0.22; }
+    .orb--3 { width: 180px; height: 180px; animation-duration: 18s; animation-delay: -14s; opacity: 0.16; }
+
+    @keyframes floatOrb {
+      0% { transform: translate3d(-10%, 10%, 0) scale(1); }
+      25% { transform: translate3d(20%, -10%, 0) scale(1.08); }
+      50% { transform: translate3d(60%, 10%, 0) scale(0.96); }
+      75% { transform: translate3d(30%, 40%, 0) scale(1.06); }
+      100% { transform: translate3d(-10%, 10%, 0) scale(1); }
+    }
+
+    .bg-grid-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      opacity: 0.25;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+    }
+    .bg-noise {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      opacity: 0.12;
+      background-image: url("image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='noStitch' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.7'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    .app-wrapper {
+      width: 100%;
+      max-width: 920px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 840px;
+      background: rgba(5, 8, 30, 0.84);
+      border-radius: 26px;
+      box-shadow:
+        0 26px 80px rgba(0, 0, 0, 0.85),
+        0 0 0 1px rgba(124, 92, 255, 0.35),
+        0 0 40px rgba(0, 209, 255, 0.25);
+      overflow: hidden;
+      backdrop-filter: blur(20px) saturate(140%);
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      animation: cardPop 0.5s ease-out;
+    }
+    .app::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(124, 92, 255, 0.25), transparent 55%),
+        radial-gradient(circle at 90% 0%, rgba(0, 209, 255, 0.2), transparent 55%),
+        radial-gradient(circle at 50% 100%, rgba(255, 0, 153, 0.14), transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+      mix-blend-mode: screen;
+    }
+    @keyframes cardPop {
+      from { opacity: 0; transform: translateY(12px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    header {
+      position: relative;
+      z-index: 1;
+      padding: 22px 26px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand { display: flex; flex-direction: column; gap: 4px; }
+    .brand-title {
+      font-size: 1.42rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand-gradient {
+      background: linear-gradient(120deg, #7c5cff, #00f5ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow:
+        0 0 12px rgba(124, 92, 255, 0.8),
+        0 0 24px rgba(0, 245, 255, 0.6);
+    }
+    .chip {
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0%, #ffffff, #ffe5ff);
+      color: #050816;
+      font-weight: 700;
+      text-transform: uppercase;
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.7),
+        0 0 14px rgba(255, 255, 255, 0.75),
+        0 0 32px rgba(124, 92, 255, 0.8);
+    }
+    .brand-subtitle { font-size: 0.88rem; color: #c4c4ff; }
+
+    .step-indicator {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #9ba3ff;
+    }
+    .step-dot-row { display: flex; align-items: center; gap: 6px; }
+    .step-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #7c5cff;
+      box-shadow:
+        0 0 0 2px rgba(124, 92, 255, 0.5),
+        0 0 16px rgba(124, 92, 255, 0.9);
+      animation: pulseDot 1.4s ease-out infinite;
+    }
+    @keyframes pulseDot {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.75; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    main { position: relative; z-index: 1; padding: 24px 26px 20px; }
+
+    .card {
+      border-radius: 20px;
+      padding: 20px 18px 18px;
+      background:
+        radial-gradient(circle at top left, rgba(124, 92, 255, 0.2), transparent 65%),
+        radial-gradient(circle at bottom right, rgba(0, 209, 255, 0.2), transparent 65%),
+        rgba(3, 7, 28, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow:
+        0 16px 46px rgba(0, 0, 0, 0.95),
+        0 0 32px rgba(0, 209, 255, 0.3);
+      animation: fadeInUp 0.35s ease-out;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle at 10% 20%, rgba(255,255,255,0.08), transparent 55%);
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .card-tagline {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #9ba3ff;
+      margin-bottom: 6px;
+    }
+    .card-title {
+      font-size: 1.12rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .card-title span.accent {
+      background: linear-gradient(120deg, #7c5cff, #00d1ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow:
+        0 0 14px rgba(0, 209, 255, 0.7),
+        0 0 26px rgba(124, 92, 255, 0.7);
+    }
+    .card-subtitle { font-size: 0.9rem; color: #cfd3ff; margin-bottom: 16px; }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .option {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 10px 10px 9px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(5, 8, 25, 0.94);
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+      font-size: 0.9rem;
+      overflow: hidden;
+    }
+    .option::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(124, 92, 255, 0.35), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+    .option:hover {
+      transform: translateY(-1px) scale(1.01);
+      border-color: rgba(124, 92, 255, 0.85);
+      box-shadow:
+        0 10px 26px rgba(0, 0, 0, 0.85),
+        0 0 22px rgba(124, 92, 255, 0.7);
+      background: radial-gradient(circle at top, rgba(124, 92, 255, 0.24), rgba(5, 8, 25, 0.98));
+    }
+    .option:hover::before { opacity: 0.4; }
+    .option.selected {
+      border-color: rgba(0, 245, 255, 1);
+      box-shadow:
+        0 10px 28px rgba(0, 209, 255, 0.5),
+        0 0 28px rgba(0, 245, 255, 0.9);
+      background: radial-gradient(circle at top, rgba(0, 245, 255, 0.28), rgba(2, 10, 30, 0.98));
+    }
+    .option-label { font-weight: 600; }
+    .option-description { font-size: 0.8rem; color: #cfd3ff; }
+    .option-meta { font-size: 0.78rem; color: #b4b9ff; margin-top: 2px; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .chip-pill {
+      font-size: 0.76rem;
+      padding: 5px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(8, 8, 28, 0.92);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      color: #d7daff;
+      box-shadow: 0 5px 14px rgba(0, 0, 0, 0.7);
+    }
+    .chip-pill:hover {
+      border-color: rgba(124, 92, 255, 0.9);
+      box-shadow:
+        0 8px 18px rgba(0, 0, 0, 0.9),
+        0 0 18px rgba(124, 92, 255, 0.7);
+      transform: translateY(-1px);
+    }
+    .chip-pill.selected {
+      background: radial-gradient(circle at 0% 0%, #ffffff, #ffe5ff);
+      border-color: transparent;
+      color: #050816;
+      box-shadow:
+        0 10px 22px rgba(0, 0, 0, 0.9),
+        0 0 22px rgba(255, 255, 255, 0.9),
+        0 0 34px rgba(124, 92, 255, 0.8);
+    }
+
+    .textarea-wrapper { margin-top: 6px; }
+    textarea {
+      width: 100%;
+      min-height: 80px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(5, 8, 26, 0.98);
+      color: #f5f5ff;
+      padding: 10px 11px;
+      resize: vertical;
+      font-family: inherit;
+      font-size: 0.88rem;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.6);
+    }
+    textarea:focus {
+      outline: 1px solid rgba(0, 209, 255, 0.9);
+      border-color: rgba(0, 209, 255, 1);
+      box-shadow:
+        0 0 0 1px rgba(0, 209, 255, 0.7),
+        0 0 16px rgba(0, 209, 255, 0.6);
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .nav-buttons { display: flex; gap: 8px; }
+
+    button {
+      border-radius: 999px;
+      border: none;
+      padding: 10px 18px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+    .btn-primary {
+      background: radial-gradient(circle at 0% 0%, #ffffff, #ffe5ff);
+      color: #050816;
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.7),
+        0 14px 30px rgba(0, 0, 0, 0.95),
+        0 0 30px rgba(124, 92, 255, 0.9);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+    }
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow:
+        0 16px 36px rgba(0, 0, 0, 0.96),
+        0 0 36px rgba(255, 255, 255, 1),
+        0 0 50px rgba(124, 92, 255, 0.9);
+      filter: brightness(1.05);
+    }
+    .btn-primary:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow:
+        0 8px 18px rgba(0, 0, 0, 0.9),
+        0 0 20px rgba(255, 255, 255, 0.7);
+    }
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: default;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
+      filter: grayscale(0.2);
+    }
+
+    .btn-ghost {
+      background: rgba(5, 8, 28, 0.9);
+      color: #cfd3ff;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.9);
+      transition: all 0.12s ease;
+    }
+    .btn-ghost:hover {
+      border-color: rgba(124, 92, 255, 0.9);
+      color: #ffffff;
+      box-shadow:
+        0 10px 22px rgba(0, 0, 0, 0.95),
+        0 0 20px rgba(124, 92, 255, 0.8);
+      transform: translateY(-1px);
+    }
+
+    .progress {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.76rem;
+      color: #9ba3ff;
+      min-width: 120px;
+    }
+    .progress-bar {
+      position: relative;
+      flex: 1;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      position: absolute;
+      inset: 0;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(120deg, #7c5cff, #00d1ff);
+      box-shadow: 0 0 14px rgba(0, 209, 255, 0.9);
+      transition: width 0.28s ease-out;
+    }
+
+    .summary {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 0.9rem;
+    }
+    .summary-block {
+      border-radius: 16px;
+      padding: 11px 12px 10px;
+      background: rgba(4, 6, 24, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.9);
+    }
+    .summary-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #9ba3ff;
+      margin-bottom: 4px;
+    }
+    .summary-line { margin-bottom: 4px; }
+    .summary-highlight {
+      color: #7bdcff;
+      font-weight: 500;
+      text-shadow: 0 0 10px rgba(0, 209, 255, 0.7);
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 10px 24px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: #9ba3ff;
+      background: linear-gradient(to right, rgba(2,5,24,0.9), rgba(4,10,30,0.9));
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 18px 18px 12px; }
+      main { padding: 18px 18px 16px; }
+      .card { padding: 16px 14px 14px; }
+      .card-title { font-size: 1rem; }
+      .options { grid-template-columns: 1fr; }
+      .brand-title { font-size: 1.1rem; }
+      .brand-subtitle { font-size: 0.82rem; }
+      footer { flex-direction: column; gap: 4px; align-items: flex-start; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-orbs">
+    <div class="orb orb--1"></div>
+    <div class="orb orb--2"></div>
+    <div class="orb orb--3"></div>
+  </div>
+  <div class="bg-grid-overlay"></div>
+  <div class="bg-noise"></div>
+
+  <div class="app-wrapper">
+    <div class="app" id="app">
+      <header>
+        <div class="brand">
+          <div class="brand-title">
+            <span class="brand-gradient">DreamAway × Games Factory</span>
+            <span class="chip">After • Duo</span>
+          </div>
+          <div class="brand-subtitle">
+            On construit notre après-midi parfait, étape par étape.
+          </div>
+        </div>
+        <div class="step-indicator">
+          <div class="step-dot-row">
+            <span class="step-dot"></span>
+            <span id="stepLabel">Étape 1 / 7</span>
+          </div>
+          <span style="font-size:0.7rem; opacity:0.8;">Mode VR planning</span>
+        </div>
+      </header>
+
+      <main>
+        <div class="card" id="card"></div>
+      </main>
+
+      <footer>
+        <div>Un peu de VR, un peu de bowling, beaucoup de bonnes vibes.</div>
+        <div id="miniStep">1 / 7</div>
+      </footer>
+    </div>
+  </div>
+
+<script>
+  const baseDreamAway = {
+    "experiences_vr": [
+      {
+        "id": 1,
+        "nom": "Escape VR",
+        "type": "Escape VR",
+        "description": "Mission immersive en VR avec résolution d’énigmes dans différents univers : historique, science-fiction, aventure…",
+        "duree_minutes": 45,
+        "scenarios": [
+          {
+            "id_scenario": 101,
+            "nom_scenario": "Escape The Lost Pyramid",
+            "description": "Pyramide égyptienne, énigmes et trésors avant que tout ne s’effondre.",
+            "duree_minutes": 45,
+            "genre": "Archéologie / Aventure"
+          },
+          {
+            "id_scenario": 102,
+            "nom_scenario": "Huxley I – Save the Future",
+            "description": "Mission futuriste dans un monde dystopique, sauver un équipage en danger.",
+            "duree_minutes": 45,
+            "genre": "Science-Fiction / Action"
+          },
+          {
+            "id_scenario": 103,
+            "nom_scenario": "Beyond Medusa’s Gate",
+            "description": "Grèce antique, légende de Méduse et énigmes pour échapper à la malédiction.",
+            "duree_minutes": 45,
+            "genre": "Mythologie / Aventure"
+          },
+          {
+            "id_scenario": 104,
+            "nom_scenario": "Incarna Chapitre 1 : L’Épreuve",
+            "description": "Dimension parallèle, épreuves mystiques et univers Incarna à découvrir.",
+            "duree_minutes": 45,
+            "genre": "Fantastique / Aventure"
+          },
+          {
+            "id_scenario": 105,
+            "nom_scenario": "Alice au pays des merveilles",
+            "description": "Univers féérique, exploration du pays des merveilles et personnages magiques.",
+            "duree_minutes": 25,
+            "genre": "Fantastique / Aventure"
+          },
+          {
+            "id_scenario": 106,
+            "nom_scenario": "On Mars",
+            "description": "Survie sur Mars et mission pour sauver une station spatiale.",
+            "duree_minutes": 25,
+            "genre": "Science-Fiction / Exploration"
+          },
+          {
+            "id_scenario": 107,
+            "nom_scenario": "Eclipse",
+            "description": "Vaisseau en péril, compte à rebours avant une grande éclipse.",
+            "duree_minutes": 45,
+            "genre": "Science-Fiction / Suspense"
+          },
+          {
+            "id_scenario": 108,
+            "nom_scenario": "The Dagger of Time",
+            "description": "Artefact puissant, combats et manipulation du temps.",
+            "duree_minutes": 45,
+            "genre": "Action / Aventure"
+          },
+          {
+            "id_scenario": 109,
+            "nom_scenario": "Sanctum",
+            "description": "Manoir mystérieux, horreur et secrets à découvrir.",
+            "duree_minutes": 45,
+            "genre": "Horreur / Mystère"
+          }
+        ]
+      }
+    ]
+  };
+
+  const baseGamesFactory = {
+    "activities_games_factory": [
+      {
+        "id": 1,
+        "nom": "Bowling at Games Factory",
+        "type": "Bowling",
+        "description": "Bowling moderne avec plusieurs pistes, ambiance lumineuse et scores automatiques."
+      },
+      {
+        "id": 2,
+        "nom": "Billard et Arcades à Games Factory",
+        "type": "Billard / Jeux d'arcade",
+        "description": "Billards et jeux d’arcade dans un espace chill pour continuer l’aprèm."
+      }
+    ]
+  };
+
+  const state = {
+    step: 0,
+    totalSteps: 7,
+    day: null,
+    vrMood: [],
+    vrScenario: null,
+    timePref: null,
+    breakType: null,
+    avoidTime: null,
+    avoidText: "",
+    trajet: null,
+    okBowling: null,
+    okBillard: null,
+    extraComment: "",
+    planningComment: ""
+  };
+
+  const cardEl = document.getElementById("card");
+  const stepLabel = document.getElementById("stepLabel");
+  const miniStep = document.getElementById("miniStep");
+
+  function updateStepUI() {
+    stepLabel.textContent = `Étape ${state.step + 1} / ${state.totalSteps}`;
+    miniStep.textContent = `${state.step + 1} / ${state.totalSteps}`;
+  }
+  function nextStep() {
+    if (state.step < state.totalSteps - 1) {
+      state.step++;
+      renderStep();
+    }
+  }
+  function prevStep() {
+    if (state.step > 0) {
+      state.step--;
+      renderStep();
+    }
+  }
+  function renderStep() {
+    updateStepUI();
+    if (state.step === 0) renderDayStep();
+    else if (state.step === 1) renderIntroStep();
+    else if (state.step === 2) renderVRMoodStep();
+    else if (state.step === 3) renderVRScenarioStep();
+    else if (state.step === 4) renderTimePrefStep();
+    else if (state.step === 5) renderGamesFactoryStep();
+    else if (state.step === 6) renderSummaryStep();
+  }
+
+  // Étape 0 : choix du jour
+  function renderDayStep() {
+    const today = new Date().toISOString().split("T")[0];
+    cardEl.innerHTML = `
+      <div class="card-tagline">Étape 1</div>
+      <div class="card-title">
+        Tu veux faire cet après-midi <span class="accent">DreamAway × Games Factory</span> quel jour ?
+      </div>
+      <div class="card-subtitle">
+        Choisis le jour qui t’arrange, on adaptera les horaires du VR, de la pause et du Games Factory en fonction.
+      </div>
+
+      <div class="summary-block">
+        <div class="summary-title">Jour préféré</div>
+        <div class="summary-line" style="margin-bottom:6px;">
+          <input
+            type="date"
+            id="dayInput"
+            value="${state.day || today}"
+            min="${today}"
+            style="
+              background: rgba(5,8,26,0.98);
+              border-radius: 10px;
+              border: 1px solid rgba(255,255,255,0.2);
+              color: #f5f5ff;
+              padding: 8px 10px;
+              font-family: inherit;
+              font-size: 0.9rem;
+            "
+          />
+        </div>
+        <div style="font-size:0.8rem; color:#b4b9ff;">
+          Tu peux choisir un jour précis, et si besoin on ajustera plus tard (week-end, soir de semaine, vacances…).
+        </div>
+      </div>
+
+      <div class="actions" style="margin-top: 14px;">
+        <div class="progress">
+          <div class="progress-bar">
+            <div class="progress-bar-fill" style="width: 5%;"></div>
+          </div>
+          <span>On cale la date</span>
+        </div>
+        <div class="nav-buttons">
+          <button class="btn-primary" id="nextBtn">
+            Continuer
+          </button>
+        </div>
+      </div>
+    `;
+    const dayInput = document.getElementById("dayInput");
+    dayInput.addEventListener("change", (e) => {
+      state.day = e.target.value;
+    });
+    document.getElementById("nextBtn").onclick = () => {
+      state.day = dayInput.value || today;
+      nextStep();
+    };
+  }
+
+  // Étape 1 : intro
+  function renderIntroStep() {
+    cardEl.innerHTML = `
+      <div class="card-tagline">Prélude</div>
+      <div class="card-title">
+        On se fait un après-midi <span class="accent">DreamAway&nbsp;→ Games Factory</span> ?
+      </div>
+      <div class="card-subtitle">
+        Quelques questions rapides, et on te génère un planning aux petits oignons.
+      </div>
+
+      <div class="summary-block">
+        <div class="summary-title">Programme de base</div>
+        <div class="summary-line">1. DreamAway : expérience VR à deux, entre 45 min et 1 h.</div>
+        <div class="summary-line">2. Pause / à manger (sur place ou ailleurs, on ajuste selon toi).</div>
+        <div class="summary-line">3. Games Factory : bowling, billard, et ce que tu sens sur le moment.</div>
+        <div style="margin-top: 6px; font-size: 0.82rem; color:#cfd3ff;">
+          Le but : zéro prise de tête, juste choisir le mood et les activités qui te donnent envie.
+        </div>
+      </div>
+
+      <div class="actions" style="margin-top: 14px;">
+        <div class="progress">
+          <div class="progress-bar">
+            <div class="progress-bar-fill" style="width: 15%;"></div>
+          </div>
+          <span>On démarre doux</span>
+        </div>
+        <div class="nav-buttons">
+          <button class="btn-ghost" id="prevBtn">Retour</button>
+          <button class="btn-primary" id="startBtn">
+            C’est parti
+          </button>
+        </div>
+      </div>
+    `;
+    document.getElementById("prevBtn").onclick = prevStep;
+    document.getElementById("startBtn").onclick = () => nextStep();
+  }
+
+  // Étape 2 : mood VR
+  function renderVRMoodStep() {
+    const moods = [
+      { id: "aventure", label: "Aventure tranquille" },
+      { id: "action", label: "Action / adrénaline" },
+      { id: "fantastique", label: "Univers fantastiques" },
+      { id: "horreur", label: "Un peu de frisson" },
+      { id: "surprise", label: "Surprends-moi" }
+    ];
+    const chipsHtml = moods.map(m => `
+      <button class="chip-pill ${state.vrMood.includes(m.id) ? "selected" : ""}" data-id="${m.id}">
+        ${m.label}
+      </button>
+    `).join("");
+
+    cardEl.innerHTML = `
+      <div class="card-tagline">Étape 3</div>
+      <div class="card-title">
+        Pour la VR chez <span class="accent">DreamAway</span>, t’es plutôt dans quel mood ?
+      </div>
+      <div class="card-subtitle">
+        Ça nous aide à choisir le bon scénario : il y a de l’aventure, de la science-fiction, de la magie, voire un peu d’horreur.
+      </div>
+
+      <div class="chips" id="moodChips">
+        ${chipsHtml}
+      </div>
+
+      <div style="font-size:0.78rem; color:#b4b9ff; margin-bottom: 10px;">
+        Tu peux cocher plusieurs moods si tu hésites, on adaptera le scénario.
+      </div>
+
+      <div class="actions">
+        <div class="progress">
+          <div class="progress-bar">
+            <div class="progress-bar-fill" style="width: 30%;"></div>
+          </div>
+          <span>VR mood</span>
+        </div>
+        <div class="nav-buttons">
+          <button class="btn-ghost" id="prevBtn">Retour</button>
+          <button class="btn-primary" id="nextBtn" ${state.vrMood.length === 0 ? "disabled" : ""}>
+            Étape suivante
+          </button>
+        </div>
+      </div>
+    `;
+    document.getElementById("prevBtn").onclick = prevStep;
+    const nextBtn = document.getElementById("nextBtn");
+    document.getElementById("moodChips").onclick = (e) => {
+      const chip = e.target.closest(".chip-pill");
+      if (!chip) return;
+      const id = chip.dataset.id;
+      const idx = state.vrMood.indexOf(id);
+      if (idx >= 0) state.vrMood.splice(idx, 1);
+      else state.vrMood.push(id);
+      renderVRMoodStep();
+    };
+    nextBtn.onclick = () => { if (state.vrMood.length > 0) nextStep(); };
+  }
+
+  function getSuggestedScenarios() {
+    const scenarios = baseDreamAway.experiences_vr[0].scenarios;
+    const mood = state.vrMood;
+    const matches = scenarios.filter(s => {
+      const g = s.genre.toLowerCase();
+      return (
+        (mood.includes("aventure") && (g.includes("aventure") || g.includes("archéologie"))) ||
+        (mood.includes("action") && (g.includes("action") || g.includes("science-fiction"))) ||
+        (mood.includes("fantastique") && (g.includes("fantastique") || g.includes("mythologie"))) ||
+        (mood.includes("horreur") && (g.includes("horreur") || g.includes("mystère")))
+      );
+    });
+    if (mood.includes("surprise") && matches.length === 0) return scenarios;
+    if (matches.length === 0) return scenarios;
+    return matches;
+  }
+
+  // Étape 3 : scénario VR
+  function renderVRScenarioStep() {
+    const vrExp = baseDreamAway.experiences_vr[0];
+    const suggested = getSuggestedScenarios();
+    const optionsHtml = suggested.map(s => `
+      <div class="option ${state.vrScenario === s.id_scenario ? "selected" : ""}" data-id="${s.id_scenario}">
+        <div class="option-label">${s.nom_scenario}</div>
+        <div class="option-description">${s.description}</div>
+        <div class="option-meta">
+          ${s.genre} • ~${s.duree_minutes} min
+        </div>
+      </div>
+    `).join("");
+
+    cardEl.innerHTML = `
+      <div class="card-tagline">Étape 4</div>
+      <div class="card-title">
+        Parmi ces scénarios VR, lequel te donne le plus envie ?
+      </div>
+      <div class="card-subtitle">
+        Tous se jouent à deux chez DreamAway Toulouse, on calera l’horaire exact ensuite.
+      </div>
+
+      <div class="options" id="scenarioOptions">
+        ${optionsHtml}
+      </div>
+
+      <div style="font-size:0.8rem; color:#b4b9ff; margin-bottom:8px;">
+        On garde ce scénario comme base, et on peut se laisser un plan B si tu veux.
+      </div>
+
+      <div class="actions">
+        <div class="progress">
+          <div class="progress-bar">
+            <div class="progress-bar-fill" style="width: 45%;"></div>
+          </div>
+          <span>Choix VR</span>
+        </div>
+        <div class="nav-buttons">
+          <button class="btn-ghost" id="prevBtn">Retour</button>
+          <button class="btn-primary" id="nextBtn" ${!state.vrScenario ? "disabled" : ""}>
+            Pause & horaires
+          </button>
+        </div>
+      </div>
+    `;
+    document.getElementById("prevBtn").onclick = prevStep;
+    const nextBtn = document.getElementById("nextBtn");
+    document.getElementById("scenarioOptions").onclick = (e) => {
+      const opt = e.target.closest(".option");
+      if (!opt) return;
+      state.vrScenario = parseInt(opt.dataset.id, 10);
+      renderVRScenarioStep();
+    };
+    nextBtn.onclick = () => { if (state.vrScenario) nextStep(); };
+  }
+
+  // Étape 4 : préférences horaires & pause
+  function renderTimePrefStep() {
+    const timeOptions = [
+      { id: "debut", label: "Début d’après-midi", desc: "Genre 14h–15h." },
+      { id: "milieu", label: "Milieu d’aprèm", desc: "Plutôt 15h–16h." },
+      { id: "fin", label: "Fin d’aprèm", desc: "Après 16h." }
+    ];
+    const breakOptions = [
+      { id: "snack", label: "Snack / drink rapide", desc: "Un truc léger et on repart." },
+      { id: "repas", label: "Vrai truc à manger", desc: "On prend bien le temps de manger." },
+      { id: "on_verra", label: "On verra sur le moment", desc: "On improvise selon la faim." }
+    ];
+    const avoidOptions = [
+      { id: "non", label: "Non, je suis flexible" },
+      { id: "oui", label: "Oui, il y a un horaire à éviter" }
+    ];
+
+    const timeHtml = timeOptions.map(o => `
+      <div class="option ${state.timePref === o.id ? "selected" : ""}" data-id="${o.id}" data-field="timePref">
+        <div class="option-label">${o.label}</div>
+        <div class="option-description">${o.desc}</div>
+      </div>
+    `).join("");
+
+    const breakHtml = breakOptions.map(o => `
+      <div class="option ${state.breakType === o.id ? "selected" : ""}" data-id="${o.id}" data-field="breakType">
+        <div class="option-label">${o.label}</div>
+        <div class="option-description">${o.desc}</div>
+      </div>
+    `).join("");
+
+    const avoidHtml = avoidOptions.map(o => `
+      <button class="chip-pill ${state.avoidTime === o.id ? "selected" : ""}" data-field="avoidTime" data-id="${o.id}">
+        ${o.label}
+      </button>
+    `).join("");
+
+    cardEl.innerHTML = `
+      <div class="card-tagline">Étape 5</div>
+      <div class="card-title">
+        On cale un peu les horaires pour que ça colle à ton rythme.
+      </div>
+      <div class="card-subtitle">
+        Ça nous aide à placer la VR, la pause et Games Factory sans que ce soit trop tôt ni trop tard pour toi.
+      </div>
+
+      <div class="summary-block">
+        <div class="summary-title">Heure de départ idéale</div>
+        <div class="options" id="timeOptions">${timeHtml}</div>
+      </div>
+
+      <div class="summary-block">
+        <div class="summary-title">Type de pause entre VR et Games Factory</div>
+        <div class="options" id="breakOptions">${breakHtml}</div>
+      </div>
+
+      <div class="summary-block">
+        <div class="summary-title">Horaires à éviter</div>
+        <div class="chips" id="avoidChips">
+          ${avoidHtml}
+        </div>
+        <div class="textarea-wrapper">
+          <textarea id="avoidText" placeholder="Si tu as un créneau à éviter (trop tard, pas avant une certaine heure, etc.), tu peux le noter ici.">${state.avoidText || ""}</textarea>
+        </div>
+      </div>
+
+      <div class="actions">
+        <div class="progress">
+          <div class="progress-bar">
+            <div class="progress-bar-fill" style="width: 60%;"></div>
+          </div>
+          <span>Horaires & pause</span>
+        </div>
+        <div class="nav-buttons">
+          <button class="btn-ghost" id="prevBtn">Retour</button>
+          <button class="btn-primary" id="nextBtn" ${!state.timePref || !state.breakType ? "disabled" : ""}>
+            Games Factory
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.getElementById("prevBtn").onclick = prevStep;
+    const nextBtn = document.getElementById("nextBtn");
+
+    document.getElementById("timeOptions").onclick = (e) => {
+      const opt = e.target.closest(".option");
+      if (!opt) return;
+      state.timePref = opt.dataset.id;
+      renderTimePrefStep();
+    };
+    document.getElementById("breakOptions").onclick = (e) => {
+      const opt = e.target.closest(".option");
+      if (!opt) return;
+      state.breakType = opt.dataset.id;
+      renderTimePrefStep();
+    };
+    document.getElementById("avoidChips").onclick = (e) => {
+      const chip = e.target.closest(".chip-pill");
+      if (!chip) return;
+      state.avoidTime = chip.dataset.id;
+      renderTimePrefStep();
+    };
+    document.getElementById("avoidText").oninput = (e) => {
+      state.avoidText = e.target.value;
+    };
+    nextBtn.onclick = () => {
+      if (state.timePref && state.breakType) nextStep();
+    };
+  }
+
+  // Étape 5 : Games Factory
+  function renderGamesFactoryStep() {
+    const bowling = baseGamesFactory.activities_games_factory[0];
+    const billard = baseGamesFactory.activities_games_factory[1];
+
+    const trajetOptions = [
+      { id: "velo", label: "À vélo", desc: "~7 min, petit trajet chill, ça met dans l’ambiance." },
+      { id: "bus", label: "En bus", desc: "~11 min, zéro effort, on se pose et on papote." },
+      { id: "sur_place", label: "On verra sur place", desc: "On avise selon la météo / vibe du moment." }
+    ];
+    const trajetHtml = trajetOptions.map(t => `
+      <div class="option ${state.trajet === t.id ? "selected" : ""}" data-id="${t.id}">
+        <div class="option-label">${t.label}</div>
+        <div class="option-description">${t.desc}</div>
+      </div>
+    `).join("");
+
+    const yesNoButtons = (current, field) => `
+      <div class="chips">
+        <button class="chip-pill ${current === true ? "selected" : ""}" data-field="${field}" data-value="oui">
+          Oui, carrément
+        </button>
+        <button class="chip-pill ${current === false ? "selected" : ""}" data-field="${field}" data-value="non">
+          On peut s’en passer
+        </button>
+      </div>
+    `;
+
+    cardEl.innerHTML = `
+      <div class="card-tagline">Étape 6</div>
+      <div class="card-title">
+        Direction <span class="accent">Games Factory</span> après la pause.
+      </div>
+      <div class="card-subtitle">
+        On garde bowling + billard comme base, mais tu peux dire si tu es chaude pour tout faire ou si tu préfères ajuster.
+      </div>
+
+      <div class="summary-block">
+        <div class="summary-title">Trajet DreamAway → Games Factory</div>
+        <div class="options" id="trajetOptions">
+          ${trajetHtml}
+        </div>
+        <div style="font-size:0.78rem; color:#b4b9ff;">
+          7 min à vélo, 11 min en bus environ, histoire que tu visualises le délire.
+        </div>
+      </div>
+
+      <div class="summary-block">
+        <div class="summary-title">Bowling</div>
+        <div class="summary-line">
+          ${bowling.description}
+        </div>
+        ${yesNoButtons(state.okBowling, "okBowling")}
+      </div>
+
+      <div class="summary-block">
+        <div class="summary-title">Billard & arcades</div>
+        <div class="summary-line">
+          ${billard.description}
+        </div>
+        ${yesNoButtons(state.okBillard, "okBillard")}
+        <div class="textarea-wrapper">
+          <textarea id="extraComment" placeholder="Si tu as des envies en plus (arcade, juste chill, dessert, autre activité…), tu peux les dropper ici.">${state.extraComment || ""}</textarea>
+        </div>
+      </div>
+
+      <div class="actions">
+        <div class="progress">
+          <div class="progress-bar">
+            <div class="progress-bar-fill" style="width: 80%;"></div>
+          </div>
+          <span>Games Factory</span>
+        </div>
+        <div class="nav-buttons">
+          <button class="btn-ghost" id="prevBtn">Retour</button>
+          <button class="btn-primary" id="nextBtn" ${!state.trajet ? "disabled" : ""}>
+            Voir le planning
+          </button>
+        </div>
+      </div>
+    `;
+    document.getElementById("prevBtn").onclick = prevStep;
+    const nextBtn = document.getElementById("nextBtn");
+
+    document.getElementById("trajetOptions").onclick = (e) => {
+      const opt = e.target.closest(".option");
+      if (!opt) return;
+      state.trajet = opt.dataset.id;
+      renderGamesFactoryStep();
+    };
+    cardEl.querySelectorAll(".chip-pill").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const field = btn.dataset.field;
+        const value = btn.dataset.value === "oui";
+        if (field === "okBowling") state.okBowling = value;
+        if (field === "okBillard") state.okBillard = value;
+        renderGamesFactoryStep();
+      });
+    });
+    document.getElementById("extraComment").oninput = (e) => {
+      state.extraComment = e.target.value;
+    };
+    nextBtn.onclick = () => { if (state.trajet) nextStep(); };
+  }
+
+  // Étape 6 : planning puis ajustements
+  function renderSummaryStep() {
+    const vrExp = baseDreamAway.experiences_vr[0];
+    const scenario = vrExp.scenarios.find(s => s.id_scenario === state.vrScenario);
+    const bowling = baseGamesFactory.activities_games_factory[0];
+    const billard = baseGamesFactory.activities_games_factory[1];
+
+    const moodText = state.vrMood.length
+      ? state.vrMood.map(id => {
+          if (id === "aventure") return "Aventure tranquille";
+          if (id === "action") return "Action / adrénaline";
+          if (id === "fantastique") return "Univers fantastiques";
+          if (id === "horreur") return "Un peu de frisson";
+          if (id === "surprise") return "Surprise";
+          return id;
+        }).join(" + ")
+      : "À définir ensemble";
+
+    const trajetText = state.trajet === "velo"
+      ? "À vélo (~7 min)"
+      : state.trajet === "bus"
+      ? "En bus (~11 min)"
+      : "On verra sur place";
+
+    const timePrefText =
+      state.timePref === "debut" ? "Début d’après-midi" :
+      state.timePref === "milieu" ? "Milieu d’après-midi" :
+      state.timePref === "fin" ? "Fin d’après-midi" :
+      "À caler ensemble";
+
+    const breakText =
+      state.breakType === "snack" ? "Snack / drink rapide" :
+      state.breakType === "repas" ? "Vrai truc à manger" :
+      state.breakType === "on_verra" ? "On verra sur le moment" :
+      "À définir";
+
+    const okBowlingText = state.okBowling === false ? "Bowling : à ajuster selon ton envie" : "Bowling prévu";
+    const okBillardText = state.okBillard === false ? "Billard / arcades : optionnel, on voit sur le moment" : "Billard / arcades prévus";
+
+    cardEl.innerHTML = `
+      <div class="card-tagline">Récap</div>
+      <div class="card-title">
+        Voilà le <span class="accent">planning</span> qu’on te propose.
+      </div>
+      <div class="card-subtitle">
+        Tu vois d’abord le plan global. Juste en dessous, tu peux nous dire précisément ce que tu veux ajuster.
+      </div>
+
+      <div class="summary">
+        <div class="summary-block">
+          <div class="summary-title">Jour & ambiance générale</div>
+          <div class="summary-line">
+            Jour choisi : <span class="summary-highlight">${state.day || "À confirmer ensemble"}</span>
+          </div>
+          <div class="summary-line">
+            Heure de départ idéale : <span class="summary-highlight">${timePrefText}</span>
+          </div>
+          <div class="summary-line">
+            Type de pause : <span class="summary-highlight">${breakText}</span>
+          </div>
+          ${state.avoidTime === "oui" || state.avoidText ? `
+            <div class="summary-line">
+              Horaires à éviter : <span class="summary-highlight">${state.avoidText || "On évite un créneau spécifique"}</span>
+            </div>
+          ` : ""}
+        </div>
+
+        <div class="summary-block">
+          <div class="summary-title">1 • DreamAway</div>
+          <div class="summary-line">
+            Mood VR : <span class="summary-highlight">${moodText}</span>
+          </div>
+          <div class="summary-line">
+            Scénario proposé : <span class="summary-highlight">${scenario?.nom_scenario || "À choisir ensemble"}</span>
+          </div>
+          <div class="summary-line" style="font-size:0.82rem; color:#cfd3ff;">
+            Durée ~${scenario?.duree_minutes || vrExp.duree_minutes} min, pour 2 joueurs.
+          </div>
+        </div>
+
+        <div class="summary-block">
+          <div class="summary-title">2 • Pause / à manger</div>
+          <div class="summary-line">
+            Pause prévue entre DreamAway et Games Factory (goûter, repas ou juste un truc à boire selon ce que tu préfères).
+          </div>
+          <div class="summary-line" style="font-size:0.82rem; color:#cfd3ff;">
+            On ajustera l’heure exacte en fonction du créneau VR et de ce que tu as choisi comme type de pause.
+          </div>
+        </div>
+
+        <div class="summary-block">
+          <div class="summary-title">3 • Games Factory</div>
+          <div class="summary-line">
+            Trajet : <span class="summary-highlight">${trajetText}</span>
+          </div>
+          <div class="summary-line">
+            ${okBowlingText}
+          </div>
+          <div class="summary-line">
+            ${okBillardText}
+          </div>
+          ${state.extraComment ? `
+          <div class="summary-line" style="margin-top:4px;">
+            Envies en plus : <span class="summary-highlight">${state.extraComment}</span>
+          </div>` : ""}
+        </div>
+
+        <div class="summary-block">
+          <div class="summary-title">Tu veux qu’on ajuste quoi ?</div>
+          <div class="summary-line" style="margin-bottom:6px;">
+            Tu peux nous dire si tu veux par exemple :
+          </div>
+          <div class="summary-line" style="font-size:0.84rem; color:#cfd3ff;">
+            – commencer plus tôt ou plus tard,<br/>
+            – enlever le billard ou le garder en option,<br/>
+            – ajouter un dessert / café quelque part,<br/>
+            – changer l’ordre (par exemple plus de temps à Games Factory, pause plus longue, etc.).
+          </div>
+          <div class="textarea-wrapper" style="margin-top:6px;">
+            <textarea id="planningComment" placeholder="Note ici tout ce que tu veux modifier ou ajouter dans le planning (horaires, ordre des activités, choses à éviter, envies en plus…).">${state.planningComment || ""}</textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions" style="margin-top: 10px;">
+        <div class="progress">
+          <div class="progress-bar">
+            <div class="progress-bar-fill" style="width: 100%;"></div>
+          </div>
+          <span>Planning prêt</span>
+        </div>
+        <div class="nav-buttons">
+          <button class="btn-ghost" id="prevBtn">Retour</button>
+          <button class="btn-primary" id="finishBtn">
+            Je t’envoie ça
+          </button>
+        </div>
+      </div>
+    `;
+    document.getElementById("prevBtn").onclick = prevStep;
+    document.getElementById("planningComment").oninput = (e) => {
+      state.planningComment = e.target.value;
+    };
+    document.getElementById("finishBtn").onclick = () => {
+      console.log("Réponses Aïda :", JSON.stringify(state, null, 2));
+      alert("Merci ! Tu peux m’envoyer tes retours, et on ajuste le planning ensemble ✨");
+    };
+  }
+
+  renderStep();
+</script>
+</body>
+</html>
