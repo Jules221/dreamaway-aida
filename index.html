@@ -43,22 +43,6 @@
       margin-bottom: 1.5rem;
     }
 
-    .fragment-container {
-      min-height: 3.2rem;
-      margin-bottom: 1.6rem;
-      position: relative;
-    }
-
-    .fragment {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      opacity: 0;
-      font-size: 1.1rem;
-      letter-spacing: 0.06em;
-      text-transform: lowercase;
-    }
-
     .sub-text {
       font-size: 1rem;
       line-height: 1.5;
@@ -66,10 +50,10 @@
       white-space: pre-line;
     }
 
-    .muted {
+    .small-note {
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
       opacity: 0.7;
-      font-size: 0.85rem;
-      margin-top: 1rem;
     }
 
     .cta-button {
@@ -105,49 +89,6 @@
         0 0 26px rgba(255, 255, 255, 0.7);
     }
 
-    .small-note {
-      margin-top: 0.75rem;
-      font-size: 0.8rem;
-      opacity: 0.7;
-    }
-
-    .type-line {
-      opacity: 0;
-      transform: translateY(6px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-
-    .type-line.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .pulse-circle {
-      width: 120px;
-      height: 120px;
-      margin: 0 auto 1.6rem;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.25);
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 0 24px rgba(255,255,255,0.15);
-    }
-
-    .pulse-inner {
-      position: absolute;
-      inset: 25%;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.7), transparent 60%);
-      opacity: 0.7;
-      animation: pulseBeat 2.4s ease-in-out infinite;
-    }
-
-    @keyframes pulseBeat {
-      0%   { transform: scale(0.8); opacity: 0.2; }
-      40%  { transform: scale(1.05); opacity: 0.9; }
-      100% { transform: scale(0.8); opacity: 0.2; }
-    }
-
     .final-text {
       text-align: left;
       font-size: 1.05rem;
@@ -174,6 +115,243 @@
       transform: translateX(-50%);
       font-size: 0.8rem;
       opacity: 0.55;
+    }
+
+    /* Zone d'animation par étape */
+    .anim-container {
+      width: 220px;
+      height: 220px;
+      margin: 0 auto 1.6rem;
+      position: relative;
+    }
+
+    /* 1) Personnage qui marche (cercle + jambes) */
+    .walker {
+      position: absolute;
+      bottom: 20px;
+      left: -40px;
+      width: 40px;
+      height: 80px;
+      animation: walker-move 6s linear infinite;
+    }
+
+    .walker-head {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, #ffffff, #ffd5f3);
+      margin: 0 auto;
+      box-shadow: 0 0 14px rgba(255, 255, 255, 0.4);
+    }
+
+    .walker-body {
+      width: 4px;
+      height: 30px;
+      background: linear-gradient(#ffd5f3, #ffffff);
+      margin: 4px auto;
+      border-radius: 999px;
+    }
+
+    .walker-leg {
+      position: absolute;
+      bottom: 0;
+      width: 4px;
+      height: 26px;
+      background: #ffffff;
+      border-radius: 999px;
+      transform-origin: top center;
+      animation: leg-swing 0.7s ease-in-out infinite alternate;
+    }
+
+    .walker-leg.right {
+      left: 22px;
+      animation-delay: 0.35s;
+    }
+
+    .walker-leg.left {
+      left: 14px;
+    }
+
+    @keyframes walker-move {
+      0%   { transform: translateX(0); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { transform: translateX(260px); opacity: 1; }
+      100% { transform: translateX(260px); opacity: 0; }
+    }
+
+    @keyframes leg-swing {
+      0%   { transform: rotate(-18deg); }
+      100% { transform: rotate(18deg); }
+    }
+
+    /* 2) Personnage qui se pose avec halo */
+    .settled {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70px;
+      height: 90px;
+    }
+
+    .settled-halo {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 80px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(255,255,255,0.18), transparent 60%);
+      opacity: 0;
+      animation: halo-pop 2.2s ease-out forwards;
+    }
+
+    .settled-person {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .settled-head {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, #ffffff, #ffd5f3);
+      margin: 0 auto;
+    }
+
+    .settled-body {
+      width: 6px;
+      height: 34px;
+      background: linear-gradient(#ffd5f3, #ffffff);
+      margin: 4px auto;
+      border-radius: 999px;
+    }
+
+    @keyframes halo-pop {
+      0%   { transform: translateX(-50%) scale(0.4); opacity: 0; }
+      40%  { transform: translateX(-50%) scale(1.05); opacity: 1; }
+      100% { transform: translateX(-50%) scale(1); opacity: 0.65; }
+    }
+
+    /* 3) Cœur qui bat doucement */
+    .heart-pulse {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      height: 80px;
+      animation: heart-beat 2.2s ease-in-out infinite;
+    }
+
+    .heart-shape {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      transform: rotate(-45deg);
+    }
+
+    .heart-shape::before,
+    .heart-shape::after {
+      content: "";
+      position: absolute;
+      width: 40px;
+      height: 64px;
+      border-radius: 40px 40px 0 0;
+      background: radial-gradient(circle at 30% 15%, #ffffff, #ff9ecb);
+      box-shadow: 0 0 16px rgba(255, 158, 203, 0.9);
+    }
+
+    .heart-shape::before {
+      left: 40px;
+    }
+
+    .heart-shape::after {
+      left: 0;
+    }
+
+    @keyframes heart-beat {
+      0%   { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+      30%  { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+      60%  { transform: translate(-50%, -50%) scale(0.95); opacity: 0.8; }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+    }
+
+    /* 4) Cercle de lumière qui grandit */
+    .glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 120px;
+      height: 120px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.4), transparent 70%);
+      animation: glow-pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes glow-pulse {
+      0%   { transform: translate(-50%, -50%) scale(0.8); opacity: 0.35; }
+      40%  { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 0.45; }
+    }
+
+    /* 5) Deux silhouettes qui se rapprochent */
+    .pair {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 180px;
+      height: 120px;
+      transform: translate(-50%, -50%);
+    }
+
+    .person {
+      position: absolute;
+      bottom: 10px;
+      width: 40px;
+      height: 70px;
+    }
+
+    .person-head {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, #ffffff, #ffd5f3);
+      margin: 0 auto;
+    }
+
+    .person-body {
+      width: 6px;
+      height: 34px;
+      background: linear-gradient(#ffd5f3, #ffffff);
+      margin: 4px auto;
+      border-radius: 999px;
+    }
+
+    .person.left {
+      left: 0;
+      animation: move-left 3.2s ease-in-out forwards;
+    }
+
+    .person.right {
+      right: 0;
+      animation: move-right 3.2s ease-in-out forwards;
+    }
+
+    @keyframes move-left {
+      0%   { transform: translateX(-20px); opacity: 0; }
+      30%  { opacity: 1; }
+      100% { transform: translateX(35px); opacity: 1; }
+    }
+
+    @keyframes move-right {
+      0%   { transform: translateX(20px); opacity: 0; }
+      30%  { opacity: 1; }
+      100% { transform: translateX(-35px); opacity: 1; }
     }
 
     /* Cœurs flottants en arrière-plan */
@@ -223,9 +401,6 @@
       .main-text {
         font-size: 1.15rem;
       }
-      .fragment {
-        font-size: 1rem;
-      }
       .sub-text {
         font-size: 0.9rem;
       }
@@ -242,11 +417,8 @@
       .main-text {
         font-size: 1.7rem;
       }
-      .sub-text {
-        font-size: 1.05rem;
-      }
-      .final-text {
-        font-size: 1.15rem;
+      .sub-text, .final-text {
+        font-size: 1.1rem;
       }
     }
   </style>
@@ -295,60 +467,42 @@
     const hintEl = document.getElementById("hint");
     let step = 1;
 
-    function typeLines(lines, container, delayBetween = 900) {
-      container.innerHTML = "";
-      lines.forEach((text, index) => {
-        const p = document.createElement("p");
-        p.className = "type-line";
-        p.textContent = text;
-        container.appendChild(p);
-        setTimeout(() => {
-          p.classList.add("visible");
-        }, delayBetween * index);
-      });
-    }
-
     function renderStep1() {
       screenEl.innerHTML = `
-        <div class="fragment-container" id="fragments"></div>
+        <div class="anim-container">
+          <div class="walker">
+            <div class="walker-head"></div>
+            <div class="walker-body"></div>
+            <div class="walker-leg left"></div>
+            <div class="walker-leg right"></div>
+          </div>
+        </div>
         <div class="main-text" id="mainLine"></div>
       `;
       hintEl.textContent = "Clique n’importe où pour continuer";
 
-      const fragments = [
-        "pas un jeu",
-        "quelque chose en moi",
-        "sensation",
-        "je ne sais pas",
-        "avancer",
-        "calme"
-      ];
-
-      const container = document.getElementById("fragments");
-      let currentIndex = 0;
-      const fragmentEl = document.createElement("div");
-      fragmentEl.className = "fragment";
-      container.appendChild(fragmentEl);
-
-      const fragInterval = setInterval(() => {
-        fragmentEl.style.opacity = 0;
-        setTimeout(() => {
-          fragmentEl.textContent = fragments[currentIndex];
-          fragmentEl.style.opacity = 1;
-          currentIndex = (currentIndex + 1) % fragments.length;
-        }, 250);
-      }, 900);
-
-      setTimeout(() => {
-        clearInterval(fragInterval);
-        fragmentEl.style.opacity = 0;
-        const mainLine = document.getElementById("mainLine");
-        mainLine.textContent = "Je ne sais pas expliquer exactement quand ça a commencé.";
-      }, 6500);
+      const line = "Je ne sais pas expliquer exactement quand ça a commencé.";
+      const mainLine = document.getElementById("mainLine");
+      mainLine.textContent = "";
+      let i = 0;
+      const interval = setInterval(() => {
+        mainLine.textContent = line.slice(0, i);
+        i++;
+        if (i > line.length) clearInterval(interval);
+      }, 45);
     }
 
     function renderStep2() {
       screenEl.innerHTML = `
+        <div class="anim-container">
+          <div class="settled">
+            <div class="settled-halo"></div>
+            <div class="settled-person">
+              <div class="settled-head"></div>
+              <div class="settled-body"></div>
+            </div>
+          </div>
+        </div>
         <div class="main-text" id="reorgLine"></div>
         <div class="sub-text">
           C’est comme si, petit à petit, tout s’était aligné en silence.
@@ -367,10 +521,29 @@
       }, 45);
     }
 
+    function typeLines(lines, container, delayBetween = 900) {
+      container.innerHTML = "";
+      lines.forEach((text, index) => {
+        const p = document.createElement("p");
+        p.className = "sub-text";
+        p.style.opacity = "0";
+        p.style.transform = "translateY(6px)";
+        p.textContent = text;
+        container.appendChild(p);
+        setTimeout(() => {
+          p.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+          p.style.opacity = "1";
+          p.style.transform = "translateY(0)";
+        }, delayBetween * index);
+      });
+    }
+
     function renderStep3() {
       screenEl.innerHTML = `
-        <div class="pulse-circle">
-          <div class="pulse-inner"></div>
+        <div class="anim-container">
+          <div class="heart-pulse">
+            <div class="heart-shape"></div>
+          </div>
         </div>
         <div id="lines"></div>
       `;
@@ -386,6 +559,9 @@
 
     function renderStep4() {
       screenEl.innerHTML = `
+        <div class="anim-container">
+          <div class="glow"></div>
+        </div>
         <div class="main-text" id="evLine"></div>
         <div class="sub-text" id="evSub"></div>
       `;
@@ -418,6 +594,18 @@
 
     function renderStep5() {
       screenEl.innerHTML = `
+        <div class="anim-container">
+          <div class="pair">
+            <div class="person left">
+              <div class="person-head"></div>
+              <div class="person-body"></div>
+            </div>
+            <div class="person right">
+              <div class="person-head"></div>
+              <div class="person-body"></div>
+            </div>
+          </div>
+        </div>
         <div class="main-text">
           À ce stade, il reste une seule chose à faire.
         </div>
