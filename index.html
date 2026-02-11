@@ -125,14 +125,15 @@
       position: relative;
     }
 
-    /* 1) Personnage qui marche (cercle + jambes) */
+    /* 1) Personnage qui marche de manière hésitante */
     .walker {
       position: absolute;
       bottom: 20px;
-      left: -40px;
+      left: 50%;
       width: 40px;
       height: 80px;
-      animation: walker-move 6s linear infinite;
+      transform: translateX(-50%);
+      animation: walker-move 6s ease-in-out forwards;
     }
 
     .walker-head {
@@ -173,10 +174,12 @@
     }
 
     @keyframes walker-move {
-      0%   { transform: translateX(0); opacity: 0; }
-      10%  { opacity: 1; }
-      90%  { transform: translateX(260px); opacity: 1; }
-      100% { transform: translateX(260px); opacity: 0; }
+      0%   { transform: translateX(-50%) translateX(-20px); opacity: 0; }
+      15%  { transform: translateX(-50%) translateX(10px); opacity: 1; }
+      35%  { transform: translateX(-50%) translateX(-5px); }
+      55%  { transform: translateX(-50%) translateX(15px); }
+      80%  { transform: translateX(-50%) translateX(0); }
+      100% { transform: translateX(-50%) translateX(0); opacity: 1; }
     }
 
     @keyframes leg-swing {
@@ -233,55 +236,11 @@
     @keyframes halo-pop {
       0%   { transform: translateX(-50%) scale(0.4); opacity: 0; }
       40%  { transform: translateX(-50%) scale(1.05); opacity: 1; }
-      100% { transform: translateX(-50%) scale(1); opacity: 0.65; }
+      100% { transform: translateX(-50%) scale(1); opacity: 0.8; }
     }
 
-    /* 3) Cœur qui bat doucement */
+    /* 3) Battement intérieur (halo pulsé) */
     .heart-pulse {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 80px;
-      height: 80px;
-      animation: heart-beat 2.2s ease-in-out infinite;
-    }
-
-    .heart-shape {
-      position: relative;
-      width: 80px;
-      height: 80px;
-      transform: rotate(-45deg);
-    }
-
-    .heart-shape::before,
-    .heart-shape::after {
-      content: "";
-      position: absolute;
-      width: 40px;
-      height: 64px;
-      border-radius: 40px 40px 0 0;
-      background: radial-gradient(circle at 30% 15%, #ffffff, #ff9ecb);
-      box-shadow: 0 0 16px rgba(255, 158, 203, 0.9);
-    }
-
-    .heart-shape::before {
-      left: 40px;
-    }
-
-    .heart-shape::after {
-      left: 0;
-    }
-
-    @keyframes heart-beat {
-      0%   { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
-      30%  { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
-      60%  { transform: translate(-50%, -50%) scale(0.95); opacity: 0.8; }
-      100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
-    }
-
-    /* 4) Cercle de lumière qui grandit */
-    .glow {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -289,8 +248,28 @@
       height: 120px;
       transform: translate(-50%, -50%);
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,255,255,0.4), transparent 70%);
-      animation: glow-pulse 4s ease-in-out infinite;
+      background: radial-gradient(circle, rgba(255,255,255,0.35), transparent 70%);
+      box-shadow: 0 0 30px rgba(255,255,255,0.3);
+      animation: heart-beat 2.4s ease-in-out infinite;
+    }
+
+    @keyframes heart-beat {
+      0%   { transform: translate(-50%, -50%) scale(0.85); opacity: 0.35; }
+      40%  { transform: translate(-50%, -50%) scale(1.05); opacity: 0.8; }
+      100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.45; }
+    }
+
+    /* 4) Cercle de lumière large */
+    .glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 160px;
+      height: 160px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.35), transparent 80%);
+      animation: glow-pulse 6s ease-in-out infinite;
     }
 
     @keyframes glow-pulse {
@@ -541,9 +520,7 @@
     function renderStep3() {
       screenEl.innerHTML = `
         <div class="anim-container">
-          <div class="heart-pulse">
-            <div class="heart-shape"></div>
-          </div>
+          <div class="heart-pulse"></div>
         </div>
         <div id="lines"></div>
       `;
