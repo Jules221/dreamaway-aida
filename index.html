@@ -37,14 +37,6 @@
       text-align: center;
     }
 
-    .stage-label {
-      font-size: 0.75rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.6);
-      margin-bottom: 1rem;
-    }
-
     .main-text {
       font-size: 1.4rem;
       line-height: 1.5;
@@ -264,7 +256,6 @@
   <div class="hearts-bg" id="heartsBg"></div>
 
   <div class="page">
-    <!-- Contenu dynamique -->
     <div class="screen" id="screen"></div>
     <div class="hint" id="hint"></div>
   </div>
@@ -319,7 +310,6 @@
 
     function renderStep1() {
       screenEl.innerHTML = `
-        <div class="stage-label">ÉTAPE 1 — L’AGITATION</div>
         <div class="fragment-container" id="fragments"></div>
         <div class="main-text" id="mainLine"></div>
       `;
@@ -359,7 +349,6 @@
 
     function renderStep2() {
       screenEl.innerHTML = `
-        <div class="stage-label">ÉTAPE 2 — LES MOTS TROUVENT LEUR PLACE</div>
         <div class="main-text" id="reorgLine"></div>
         <div class="sub-text">
           C’est comme si, petit à petit, tout s’était aligné en silence.
@@ -380,7 +369,6 @@
 
     function renderStep3() {
       screenEl.innerHTML = `
-        <div class="stage-label">ÉTAPE 3 — LE CŒUR SE STABILISE</div>
         <div class="pulse-circle">
           <div class="pulse-inner"></div>
         </div>
@@ -398,7 +386,6 @@
 
     function renderStep4() {
       screenEl.innerHTML = `
-        <div class="stage-label">ÉTAPE 4 — L’ÉVIDENCE</div>
         <div class="main-text" id="evLine"></div>
         <div class="sub-text" id="evSub"></div>
       `;
@@ -431,7 +418,6 @@
 
     function renderStep5() {
       screenEl.innerHTML = `
-        <div class="stage-label">ÉTAPE 5 — LE CHOIX</div>
         <div class="main-text">
           À ce stade, il reste une seule chose à faire.
         </div>
@@ -448,7 +434,6 @@
 
     function renderFinal() {
       screenEl.innerHTML = `
-        <div class="stage-label">CE QUE JE VEUX TE DIRE</div>
         <div class="final-text">
 Je ne sais pas expliquer exactement quand ça a commencé.
 Je sais juste qu’en apprenant à te connaître, quelque chose en moi s’est posé.
