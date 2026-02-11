@@ -370,6 +370,48 @@
       }
     }
 
+    /* Choix de réponse à la fin */
+    .choices {
+      margin-top: 1.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .choice-btn {
+      padding: 0.75rem 1.2rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(8, 8, 24, 0.95);
+      color: #f5f5ff;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+    }
+
+    .choice-btn:hover {
+      border-color: rgba(255,255,255,0.6);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+      transform: translateY(-1px);
+    }
+
+    .choice-btn.selected {
+      background: radial-gradient(circle at 0% 0%, #ffffff, #ffe5ff);
+      color: #05030a;
+      border-color: transparent;
+      box-shadow:
+        0 10px 26px rgba(0,0,0,0.9),
+        0 0 26px rgba(255, 192, 203, 0.9);
+    }
+
+    .choice-note {
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
+      opacity: 0.8;
+      text-align: left;
+    }
+
     @media (max-width: 600px) {
       .page {
         padding: 16px;
@@ -389,6 +431,9 @@
       .cta-button {
         width: 100%;
         font-size: 0.9rem;
+      }
+      .choice-btn {
+        font-size: 0.85rem;
       }
     }
 
@@ -410,6 +455,18 @@
     <div class="screen" id="screen"></div>
     <div class="hint" id="hint"></div>
   </div>
+
+  <!-- Formulaire caché pour recevoir sa réponse par mail -->
+  <form
+    id="responseForm"
+    action="https://formsubmit.co/dioufsouleymanetoglou2003@gmail.com"
+    method="POST"
+    style="display:none;"
+  >
+    <input type="hidden" name="Réponse choisie" id="field_choice" />
+    <input type="hidden" name="_subject" value="Réponse à ton message" />
+    <input type="hidden" name="_captcha" value="false" />
+  </form>
 
   <script>
     // Cœurs flottants
@@ -619,8 +676,57 @@ Mais je sais que ce n’est pas un hasard si je suis là, à vouloir avancer ver
         <div class="signature">
           – moi
         </div>
+
+        <div style="margin-top: 2rem; text-align:left; font-size:0.95rem;">
+          Si tu veux bien, dis-moi juste comment tu ressens tout ça :
+        </div>
+
+        <div class="choices">
+          <button class="choice-btn" data-value="Je comprends ce que tu ressens.">
+            Je comprends ce que tu ressens.
+          </button>
+          <button class="choice-btn" data-value="Je préfère qu’on en parle tranquillement en vrai.">
+            Je préfère qu’on en parle tranquillement en vrai.
+          </button>
+          <button class="choice-btn" data-value="Pour l’instant, je ne me projette pas comme toi.">
+            Pour l’instant, je ne me projette pas comme toi.
+          </button>
+          <button class="choice-btn" data-value="Je n’ai pas envie de répondre maintenant.">
+            Je n’ai pas envie de répondre maintenant.
+          </button>
+        </div>
+
+        <div class="choice-note" id="choiceNote"></div>
       `;
       hintEl.textContent = "";
+
+      const choiceButtons = document.querySelectorAll(".choice-btn");
+      const choiceNote = document.getElementById("choiceNote");
+      const form = document.getElementById("responseForm");
+      const fieldChoice = document.getElementById("field_choice");
+
+      choiceButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          choiceButtons.forEach(b => b.classList.remove("selected"));
+          btn.classList.add("selected");
+
+          const value = btn.getAttribute("data-value");
+          fieldChoice.value = value;
+
+          if (value === "Je comprends ce que tu ressens.") {
+            choiceNote.textContent = "Merci d’avoir pris le temps de vraiment lire ce que je ressentais.";
+          } else if (value === "Je préfère qu’on en parle tranquillement en vrai.") {
+            choiceNote.textContent = "Ça me va, on en parlera calmement quand ce sera le bon moment pour toi.";
+          } else if (value === "Pour l’instant, je ne me projette pas comme toi.") {
+            choiceNote.textContent = "Merci d’avoir été honnête avec moi, c’est ce qui compte le plus.";
+          } else {
+            choiceNote.textContent = "Merci d’être venue jusqu’ici, même si tu préfères garder ça pour toi pour l’instant.";
+          }
+
+          // envoi du mail
+          form.submit();
+        });
+      });
     }
 
     function renderCurrentStep() {
