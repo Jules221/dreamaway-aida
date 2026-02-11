@@ -18,7 +18,8 @@
       background: radial-gradient(circle at top, #080313, #020008);
       color: #f5f5ff;
       min-height: 100vh;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
 
     .page {
@@ -35,6 +36,7 @@
       max-width: 640px;
       width: 100%;
       text-align: center;
+      padding-bottom: 40px;
     }
 
     .main-text {
@@ -109,12 +111,13 @@
     }
 
     .hint {
-      position: absolute;
+      position: fixed;
       bottom: 16px;
       left: 50%;
       transform: translateX(-50%);
       font-size: 0.8rem;
       opacity: 0.55;
+      pointer-events: none;
     }
 
     /* Zone d'animation par étape */
@@ -723,7 +726,6 @@ Mais je sais que ce n’est pas un hasard si je suis là, à vouloir avancer ver
             choiceNote.textContent = "Merci d’être venue jusqu’ici, même si tu préfères garder ça pour toi pour l’instant.";
           }
 
-          // envoi du mail
           form.submit();
         });
       });
